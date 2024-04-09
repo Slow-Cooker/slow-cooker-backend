@@ -1,9 +1,18 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/users/entities/user.entity";
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
 
 export enum Difficulty {
     Weak = 'Weak',
     Intermediary = 'Intermediary',
     Difficult = 'Difficult',
+  }
+
+export enum Category {
+    Entree = 'Entree',
+    Dish = 'Dish',
+    Dessert = 'Dessert',
+    Drink = 'Drink',
+    Aperitifs = 'Aperitifs'
   }
 
 @Entity()
@@ -15,5 +24,17 @@ export class Recipe {
     name_recipe: string;
 
     @Column()
-    role: Difficulty
+    difficulty: Difficulty
+
+    @Column()
+    category: Category
+
+    @ManyToOne(() => User)
+    owner: User;
+    
+    @Column()
+    duration: string;
+
+    @Column()
+    validate: boolean;
 }
