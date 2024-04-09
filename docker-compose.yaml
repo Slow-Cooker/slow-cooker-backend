@@ -4,8 +4,8 @@ services:
     image: postgres
     restart: always
     environment:
-      - POSTGRES_PASSWORD=postgres
-    container_name: postgres
+      POSTGRES_PASSWORD: 'miamiam'
+    container_name: slowcooker
     volumes:
       - ./pgdata:/var/lib/postgresql/data
     ports:
@@ -22,4 +22,6 @@ services:
     depends_on:
       - db
     volumes:
-      - ./src:/app/src
+      - .:/app
+    env_file:
+      - '.env'
