@@ -6,7 +6,7 @@ export class Ingredient {
 @PrimaryGeneratedColumn("uuid")
 id_ingredient: string
 
-@Column()
+@Column({ unique : true })
 name_ingredient: string
 
 @Column()

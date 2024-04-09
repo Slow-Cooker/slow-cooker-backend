@@ -5,7 +5,6 @@ services:
     restart: always
     environment:
       POSTGRES_DB: slow-cooker
-      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     container_name: slowcooker
     volumes:

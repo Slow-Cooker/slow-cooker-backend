@@ -3,12 +3,12 @@ import { UsersModule } from './users/users.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './users/auth/auth.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { User } from './users/entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './users/auth/auth.module';
 import { Ingredient } from './ingredient/entities/ingredient.entity';
 import { IngredientModule } from './ingredient/ingredient.module';
 import { RecipeModule } from './recipe/recipe.module';
+import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
