@@ -9,6 +9,7 @@ import { Ingredient } from './ingredient/entities/ingredient.entity';
 import { IngredientModule } from './ingredient/ingredient.module';
 import { RecipeModule } from './recipe/recipe.module';
 import { User } from './users/entities/user.entity';
+import { Recipe } from './recipe/entities/recipe.entity';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { User } from './users/entities/user.entity';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [User, Ingredient],
+        entities: [User, Ingredient, Recipe],
         synchronize: true,
       }),
       inject: [ConfigService],
