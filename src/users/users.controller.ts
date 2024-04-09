@@ -48,8 +48,8 @@ export class UsersController {
   }
 
   @Get('/me')
-  async getMyUserInfo(@Request() req: ExpressRequest): Promise<User> {
-    return req['user'] as User;
+  async getMyUserInfo(@Request() request: ExpressRequest): Promise<User> {
+    return request['user'] as User;
   }
 
   @Get(':id')
