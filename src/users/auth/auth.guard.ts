@@ -1,7 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException, SetMetadata } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { Request } from 'express';
-import { UsersService } from '../users.service';
+import { Request as ExpressRequest } from 'express';
 import { Reflector } from '@nestjs/core';
 import { Inject } from '@nestjs/common/decorators';
 import { forwardRef } from '@nestjs/common/utils';
@@ -37,15 +35,16 @@ export class AuthGuard implements CanActivate {
     }
 
     const user = await this.auth.authFromToken(token)
-    request['user'] = user
 
-    if (!user) throw new UnauthorizedException()
+    if (!user) throw new UnauthorizedException();
+
+    request['user'] = user;
 
     return true
   }
 }
 
-function extractTokenFromHeader(request: Request): string | null {
+function extractTokenFromHeader(request: ExpressRequest): string | null {
   const authHeader = request.headers.authorization;
 
   if (authHeader && typeof authHeader === 'string') {
