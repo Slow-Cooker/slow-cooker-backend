@@ -22,8 +22,8 @@ export class IngredientService {
       throw new ConflictException("This ingredient already exist")
     }
     const newIngredient = this.ingredientRepository.create(createIngredientDto);
-    this.ingredientRepository.save(newIngredient);
-    return 'This action adds a new ingredient';
+    const saveIngredient = await this.ingredientRepository.save(newIngredient);
+    return saveIngredient;
   }
 
   async findOne(id: string) {
@@ -41,8 +41,8 @@ export class IngredientService {
       throw new NotFoundException("This ingredient dosen\'t exist")
     }
     const updatedIngredient = this.ingredientRepository.merge(ingredient, updateIngredientDto);
-    this.ingredientRepository.save(updatedIngredient);
-    return `This action updates a #${id} ingredient`;
+    const saveIngredient = await this.ingredientRepository.save(updatedIngredient);
+    return saveIngredient;
   }
 
   async remove(id: string) {
