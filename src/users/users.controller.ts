@@ -16,8 +16,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { AuthService } from './auth/auth.service';
 import { LoginUserDto } from './dto/login-user.dto';
-import { Public} from './auth/auth.guard';
-import  {Request as ExpressRequest} from 'express';
+import { Public } from './auth/auth.guard';
+import { Request as ExpressRequest } from 'express';
 
 @Controller('users')
 export class UsersController {
@@ -38,8 +38,8 @@ export class UsersController {
   @Public()
   @Post('auth/login')
   async login(@Body() dto: LoginUserDto): Promise<{ access_token: string }> {
-    const access_token = await this.authservice.signIn(dto)
-    return { access_token }
+    const access_token = await this.authservice.signIn(dto);
+    return { access_token };
   }
 
   @Get()
@@ -53,9 +53,9 @@ export class UsersController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<User>{
-    const user= await this.usersService.getUserInfo(id);
-    if(!user) throw new NotFoundException();
+  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
+    const user = await this.usersService.getUserInfo(id);
+    if (!user) throw new NotFoundException();
     return user;
   }
 }
