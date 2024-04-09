@@ -19,16 +19,16 @@ export class RecipeController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.recipeService.findOne(+id);
+    return this.recipeService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateRecipeDto: UpdateRecipeDto) {
-    return this.recipeService.update(+id, updateRecipeDto);
+    return this.recipeService.update(id, updateRecipeDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.recipeService.remove(+id);
+    return this.recipeService.remove(id);
   }
 }
