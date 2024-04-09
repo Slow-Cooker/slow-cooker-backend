@@ -4,7 +4,9 @@ services:
     image: postgres
     restart: always
     environment:
-      - POSTGRES_PASSWORD=postgres
+      POSTGRES_DB: slow-cooker
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     container_name: postgres
     volumes:
       - ./pgdata:/var/lib/postgresql/data
@@ -14,11 +16,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: nest-docker-postgres
+    container_name: slow-cooker
     environment:
       - PORT=${PORT}
+      - DATABASE_HOST=db
     ports:
-      - '3000:3000'
+      - '3001:3000'
     depends_on:
       - db
     volumes:
