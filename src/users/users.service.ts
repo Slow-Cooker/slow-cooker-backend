@@ -11,29 +11,28 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     public readonly userRepository: Repository<User>,
-  ) { }
+  ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-
     const newUser = this.userRepository.create({
       ...createUserDto,
-      password: await this.hashPassword(createUserDto.password)
+      password: await this.hashPassword(createUserDto.password),
     });
     const inserteddata = await this.userRepository.save(newUser);
     delete inserteddata.password;
     return inserteddata;
-
   }
 
   async findByEmail(email: string): Promise<User | null> {
     return await this.userRepository.findOne({
-      where: { email }, select: {
+      where: { email },
+      select: {
         id: true,
         email: true,
         username: true,
         role: true,
-        password: true
-      }
+        password: true,
+      },
     });
   }
 
@@ -41,9 +40,8 @@ export class UsersService {
     return Argon2.hash(password);
   }
 
-
   async getUserInfo(id: string): Promise<User | null> {
-    return await this.userRepository.findOneBy( { id } );
+    return await this.userRepository.findOneBy({ id });
   }
 
   async findAll() {
@@ -52,6 +50,6 @@ export class UsersService {
   }
 
   async findById(id: string): Promise<User> {
-    return this.userRepository.findOneBy({ id })
+    return this.userRepository.findOneBy({ id });
   }
 }

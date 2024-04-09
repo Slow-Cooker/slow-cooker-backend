@@ -1,4 +1,10 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException, SetMetadata } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+  SetMetadata,
+} from '@nestjs/common';
 import { Request as ExpressRequest } from 'express';
 import { Reflector } from '@nestjs/core';
 import { Inject } from '@nestjs/common/decorators';
@@ -15,7 +21,7 @@ export class AuthGuard implements CanActivate {
     @Inject(forwardRef(() => AuthService))
     private readonly auth: AuthService,
     private reflector: Reflector,
-  ) { }
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
@@ -34,13 +40,13 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    const user = await this.auth.authFromToken(token)
+    const user = await this.auth.authFromToken(token);
 
     if (!user) throw new UnauthorizedException();
 
     request['user'] = user;
 
-    return true
+    return true;
   }
 }
 

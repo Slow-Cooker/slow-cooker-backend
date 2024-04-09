@@ -1,5 +1,12 @@
 //create-user.dto.ts
-import { IsString, IsOptional, IsEnum, IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsEnum,
+  IsEmail,
+  IsNotEmpty,
+  MinLength,
+} from 'class-validator';
 import { UserRole } from '../entities/user.entity';
 export class CreateUserDto {
   @IsNotEmpty()
@@ -7,18 +14,17 @@ export class CreateUserDto {
   @IsString()
   username!: string;
 
-  @IsNotEmpty() 
+  @IsNotEmpty()
   @IsString()
   @IsEmail()
   email!: string;
 
-  @IsNotEmpty() 
+  @IsNotEmpty()
   @IsString()
   @MinLength(8)
   password!: string;
 
-  @IsOptional() 
+  @IsOptional()
   @IsEnum(UserRole)
   role?: UserRole;
-
 }
