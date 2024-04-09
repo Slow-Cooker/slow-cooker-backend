@@ -17,7 +17,7 @@ import { User } from './entities/user.entity';
 import { AuthService } from './auth/auth.service';
 import { LoginUserDto } from './dto/login-user.dto';
 import { Public} from './auth/auth.guard';
-import  {Request as ExpressRequest} from 'express'
+import  {Request as ExpressRequest} from 'express';
 
 @Controller('users')
 export class UsersController {
@@ -33,7 +33,7 @@ export class UsersController {
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.create(createUserDto);
   }
-  
+
   //Route de login
   @Public()
   @Post('auth/login')
@@ -41,7 +41,7 @@ export class UsersController {
     const access_token = await this.authservice.signIn(dto)
     return { access_token }
   }
-  
+
   @Get()
   async findAll(): Promise<User[]> {
     return this.usersService.findAll();
@@ -49,9 +49,9 @@ export class UsersController {
 
   @Get('/me')
   async getMyUserInfo(@Request() req: ExpressRequest): Promise<User> {
-    return req.user as User;
+    return req['user'] as User;
   }
-  
+
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<User>{
     const user= await this.usersService.getUserInfo(id);
