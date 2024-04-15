@@ -4,6 +4,7 @@ import { UpdateRecipeDto } from './dto/update-recipe.dto';
 import { Recipe } from './entities/recipe.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class RecipeService {
@@ -18,6 +19,15 @@ export class RecipeService {
     return saveRecipe;
   }
 
+  async findOneRecipeByOwnerId(owner: User): Promise<Recipe[]> {
+    console.log(owner);
+    const recipes = await this.recipeRepository.findBy({ owner });
+    if (!recipes) {
+      throw new NotFoundException("This recipe doesn't exist");
+    }
+    return recipes;
+  }
+
   async findAll() {
     const allRecipe = await this.recipeRepository.find();
     return allRecipe;
@@ -30,7 +40,7 @@ export class RecipeService {
       },
     });
     if (!recipe) {
-      throw new NotFoundException("This recipe dosen't exist");
+      throw new NotFoundException("This recipe doesn't exist");
     }
     return recipe;
   }
@@ -38,7 +48,7 @@ export class RecipeService {
   async update(id: string, updateRecipeDto: UpdateRecipeDto) {
     const recipe = await this.recipeRepository.findOneBy({ id_recipe: id });
     if (!recipe) {
-      throw new NotFoundException("This recipe dosen't exist");
+      throw new NotFoundException("This recipe doesn't exist");
     }
     const updatedRecipe = this.recipeRepository.merge(recipe, updateRecipeDto);
     const recipeSave = await this.recipeRepository.save(updatedRecipe);
@@ -48,7 +58,7 @@ export class RecipeService {
   async remove(id: string) {
     const recipe = await this.recipeRepository.findOneBy({ id_recipe: id });
     if (!recipe) {
-      throw new NotFoundException("This recipe dosen't exist");
+      throw new NotFoundException("This recipe doesn't exist");
     }
     this.recipeRepository.delete(recipe.id_recipe);
     return `This action removes a #${id} recipe`;
