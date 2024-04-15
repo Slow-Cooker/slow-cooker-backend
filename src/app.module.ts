@@ -10,6 +10,7 @@ import { IngredientModule } from './ingredient/ingredient.module';
 import { RecipeModule } from './recipe/recipe.module';
 import { User } from './users/entities/user.entity';
 import { Recipe } from './recipe/entities/recipe.entity';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -32,13 +33,15 @@ import { Recipe } from './recipe/entities/recipe.entity';
     AuthModule,
     IngredientModule,
     RecipeModule,
+    CommentModule,
   ],
   controllers: [],
   providers: [
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
-    },ConfigService
+    },
+    ConfigService,
   ],
 })
 export class AppModule {}
