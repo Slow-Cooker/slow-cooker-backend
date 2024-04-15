@@ -1,12 +1,6 @@
 import { PartialType } from '@nestjs/swagger';
 import { CreateRecipeDto } from './create-recipe.dto';
-import {
-  IsBoolean,
-  IsEnum,
-  IsOptional,
-  IsString,
-  MinLength,
-} from 'class-validator';
+import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
 import { Category, Difficulty } from '../entities/recipe.entity';
 
 export class UpdateRecipeDto extends PartialType(CreateRecipeDto) {
