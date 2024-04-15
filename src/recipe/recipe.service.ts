@@ -29,6 +29,9 @@ export class RecipeService {
         id_recipe: id,
       },
     });
+    if (!recipe) {
+      throw new NotFoundException("This recipe dosen't exist");
+    }
     return recipe;
   }
 
