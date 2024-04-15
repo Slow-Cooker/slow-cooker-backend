@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
 import { Recipe } from './entities/recipe.entity';
@@ -29,6 +29,9 @@ export class RecipeService {
         id_recipe: id
       }
     })
+    if(!recipe){
+      throw new NotFoundException("This recipe dosen\'t exist")
+    }
     return recipe;
   }
 
