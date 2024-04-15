@@ -10,6 +10,8 @@ import { IngredientModule } from './ingredient/ingredient.module';
 import { RecipeModule } from './recipe/recipe.module';
 import { User } from './users/entities/user.entity';
 import { Recipe } from './recipe/entities/recipe.entity';
+import { LikeModule } from './like/like.module';
+import { Like } from './like/entities/like.entity';
 
 @Module({
   imports: [
@@ -23,7 +25,7 @@ import { Recipe } from './recipe/entities/recipe.entity';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [User, Ingredient, Recipe],
+        entities: [User, Ingredient, Recipe, Like],
         synchronize: true,
       }),
       inject: [ConfigService],
@@ -32,6 +34,7 @@ import { Recipe } from './recipe/entities/recipe.entity';
     AuthModule,
     IngredientModule,
     RecipeModule,
+    LikeModule,
   ],
   controllers: [],
   providers: [
