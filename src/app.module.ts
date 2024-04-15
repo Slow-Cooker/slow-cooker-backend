@@ -14,6 +14,7 @@ import { CommentModule } from './comment/comment.module';
 import { LikeModule } from './like/like.module';
 import { Comment } from './comment/entities/comment.entity';
 import { Like } from './like/entities/like.entity';
+import { SelectionsModule } from './selections/selections.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { Like } from './like/entities/like.entity';
     RecipeModule,
     CommentModule,
     LikeModule,
+    SelectionsModule,
   ],
   controllers: [],
   providers: [
