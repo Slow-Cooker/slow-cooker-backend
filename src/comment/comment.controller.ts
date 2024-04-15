@@ -2,27 +2,30 @@ import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 
-@Controller('comment')
+@Controller(':recipeId/comment')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
   @Post()
-  create(@Body() createCommentDto: CreateCommentDto) {
-    return this.commentService.create(createCommentDto);
+  create(
+    @Param('recipeId') recipeId: string,
+    @Body() createCommentDto: CreateCommentDto,
+  ) {
+    return this.commentService.create(recipeId, createCommentDto);
   }
 
   @Get()
-  findAll() {
-    return this.commentService.findAll();
+  findAll(@Param('recipeId') recipeId: string) {
+    return this.commentService.findAll(recipeId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.commentService.findOne(id);
+  findOne(@Param('recipeId') recipeId: string, @Param('id') id: string) {
+    return this.commentService.findOne(recipeId, id);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.commentService.remove(id);
+  remove(@Param('recipeId') recipeId: string, @Param('id') id: string) {
+    return this.commentService.remove(recipeId, id);
   }
 }

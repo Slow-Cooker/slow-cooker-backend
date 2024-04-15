@@ -11,18 +11,20 @@ export class CommentService {
     private readonly commentRepository: Repository<Comment>,
   ) {}
 
-  async create(createCommentDto: CreateCommentDto) {
+  async create(recipeId: string, createCommentDto: CreateCommentDto) {
     const newComment = this.commentRepository.create(createCommentDto);
     const saveComment = await this.commentRepository.save(newComment);
     return saveComment;
   }
 
-  async findAll() {
-    const allComment = await this.commentRepository.find();
+  async findAll(recipeId: string) {
+    const allComment = await this.commentRepository.find({
+      where: { recipe: { id_recipe: recipeId } },
+    });
     return allComment;
   }
 
-  async findOne(id: string) {
+  async findOne(recipeId: string, id: string) {
     const comment = await this.commentRepository.findOne({
       where: {
         id_comment: id,
@@ -31,7 +33,7 @@ export class CommentService {
     return comment;
   }
 
-  async remove(id: string) {
+  async remove(recipeId: string, id: string) {
     const comment = await this.commentRepository.findOneBy({ id_comment: id });
     if (!comment) {
       throw new NotFoundException("This comment doesn't exist");
