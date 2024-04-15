@@ -1,26 +1,58 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSelectionDto } from './dto/create-selection.dto';
 import { UpdateSelectionDto } from './dto/update-selection.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Selection } from './entities/selection.entity';
 
 @Injectable()
 export class SelectionsService {
-  create(createSelectionDto: CreateSelectionDto) {
-    return 'This action adds a new selection';
+  constructor(
+    @InjectRepository(Selection)
+    private readonly selectionRepository: Repository<Selection>,
+  ) {}
+  async create(createSelection: CreateSelectionDto) {
+    const newSelection = this.selectionRepository.create(createSelection);
+    const selection = await this.selectionRepository.save(newSelection);
+    return selection;
   }
 
-  findAll() {
-    return `This action returns all selections`;
+  async findAll() {
+    const selections = await this.selectionRepository.find();
+    return selections;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} selection`;
+  async findOne(id: string) {
+    const selection = await this.selectionRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+    if (!selection) {
+      throw new NotFoundException("This recipe doesn't exist");
+    }
+    return selection;
   }
 
-  update(id: number, updateSelectionDto: UpdateSelectionDto) {
-    return `This action updates a #${id} selection`;
+  async update(id: string, updateSelectionDto: UpdateSelectionDto) {
+    const selection = await this.selectionRepository.findOneBy({ id: id });
+    if (!selection) {
+      throw new NotFoundException("This recipe doesn't exist");
+    }
+    const updatedRecipe = this.selectionRepository.merge(
+      selection,
+      updateSelectionDto,
+    );
+    const selection1 = await this.selectionRepository.save(updatedRecipe);
+    return selection1;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} selection`;
+  async remove(id: string) {
+    const selection = await this.selectionRepository.findOneBy({ id: id });
+    if (!selection) {
+      throw new NotFoundException("This recipe doesn't exist");
+    }
+    this.selectionRepository.delete(selection.id);
+    return `This action removes a #${id} recipe`;
   }
 }

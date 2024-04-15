@@ -1,10 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Patch,
+} from '@nestjs/common';
 import { SelectionsService } from './selections.service';
 import { CreateSelectionDto } from './dto/create-selection.dto';
-import { UpdateSelectionDto } from './dto/update-selection.dto';
+import { UpdateRecipeDto } from '../recipe/dto/update-recipe.dto';
 
-@Controller('selections')
-export class SelectionsController {
+@Controller('selection')
+export class CommentController {
   constructor(private readonly selectionsService: SelectionsService) {}
 
   @Post()
@@ -19,16 +27,16 @@ export class SelectionsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.selectionsService.findOne(+id);
+    return this.selectionsService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSelectionDto: UpdateSelectionDto) {
-    return this.selectionsService.update(+id, updateSelectionDto);
+  update(@Param('id') id: string, @Body() updateRecipeDto: UpdateRecipeDto) {
+    return this.selectionsService.update(id, updateRecipeDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.selectionsService.remove(+id);
+    return this.selectionsService.remove(id);
   }
 }
