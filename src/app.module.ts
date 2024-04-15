@@ -38,7 +38,8 @@ import { Recipe } from './recipe/entities/recipe.entity';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
-    },ConfigService
+    },
+    ConfigService,
   ],
 })
 export class AppModule {}

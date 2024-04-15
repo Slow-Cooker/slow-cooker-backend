@@ -8,5 +8,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [TypeOrmModule.forFeature([Recipe])],
   controllers: [RecipeController],
   providers: [RecipeService],
+  exports: [RecipeService],
 })
 export class RecipeModule {}

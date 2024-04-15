@@ -22,12 +22,11 @@ export class AuthService {
     return this.jwt.signAsync({ sub: user.id }, {});
   }
 
-  async authFromToken(token: string): Promise<User | null> {
+  async authFromToken(token: string) {
     const payload = await this.jwt.verifyAsync(token);
 
     if (payload && payload.sub) {
-      const user = this.users.findById(payload.sub);
-
+      const user = (await this.users.findById(payload.sub)) as User;
       if (user) return user;
     }
 

@@ -18,15 +18,17 @@ import { AuthService } from './auth/auth.service';
 import { LoginUserDto } from './dto/login-user.dto';
 import { Public } from './auth/auth.guard';
 import { Request as ExpressRequest } from 'express';
+import { RecipeService } from '../recipe/recipe.service';
 
 @Controller('users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    private readonly authservice: AuthService,
+    private readonly authService: AuthService,
+    private readonly recipeService: RecipeService,
   ) {}
 
-  // Route de connexion des utilisateurs
+  // Route de connexion des utilisateurs coucou
   @Public()
   @Post('auth/sign-up')
   @UsePipes(new ValidationPipe())
@@ -38,7 +40,7 @@ export class UsersController {
   @Public()
   @Post('auth/login')
   async login(@Body() dto: LoginUserDto): Promise<{ access_token: string }> {
-    const access_token = await this.authservice.signIn(dto);
+    const access_token = await this.authService.signIn(dto);
     return { access_token };
   }
 
@@ -48,8 +50,16 @@ export class UsersController {
   }
 
   @Get('/me')
-  async getMyUserInfo(@Request() request: ExpressRequest): Promise<User> {
-    return request['user'] as User;
+  async getMyUserInfo(@Request() request: ExpressRequest) {
+    const user = request['user'] as User;
+    const recipe = await this.recipeService.findOneRecipeByOwnerId(user);
+    return {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      recipe: recipe,
+    };
   }
 
   @Get(':id')
