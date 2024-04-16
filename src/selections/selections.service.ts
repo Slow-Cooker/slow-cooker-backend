@@ -110,6 +110,7 @@ export class SelectionsService {
         id_user: true,
       },
       where: {
+        //name: 'Super',
         id_user: user,
       },
     });
