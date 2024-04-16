@@ -79,7 +79,7 @@ export class SelectionsService {
       }
     }
     console.log('Before merge:', selection);
-    const updatedSelection = this.selectionRepository.insert(selection, {
+    const updatedSelection = this.selectionRepository.merge(selection, {
       id: selection.id,
       recipes: updatedRecipes,
       id_user: selection.id_user,
