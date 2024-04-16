@@ -16,6 +16,8 @@ import { Comment } from './comment/entities/comment.entity';
 import { Like } from './like/entities/like.entity';
 import { SelectionsModule } from './selections/selections.module';
 import { Selection } from './selections/entities/selection.entity';
+import { RecipeIngredientsModule } from './recipe_ingredients/recipe_ingredients.module';
+import { RecipeIngredient } from './recipe_ingredients/entities/recipe_ingredient.entity';
 
 @Module({
   imports: [
@@ -29,7 +31,15 @@ import { Selection } from './selections/entities/selection.entity';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [User, Ingredient, Recipe, Comment, Like, Selection],
+        entities: [
+          User,
+          Ingredient,
+          Recipe,
+          Comment,
+          Like,
+          Selection,
+          RecipeIngredient,
+        ],
         synchronize: true,
       }),
       inject: [ConfigService],
@@ -41,6 +51,7 @@ import { Selection } from './selections/entities/selection.entity';
     CommentModule,
     LikeModule,
     SelectionsModule,
+    RecipeIngredientsModule,
   ],
   controllers: [],
   providers: [
