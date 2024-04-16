@@ -7,7 +7,7 @@ export class CreateSelectionDto {
   user: User;
 
   @IsNotEmpty()
-  recipe: Recipe[];
+  recipes: Recipe[];
 
   @IsNotEmpty()
   @IsString()

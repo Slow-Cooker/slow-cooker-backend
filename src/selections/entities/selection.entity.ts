@@ -1,5 +1,11 @@
 import { User } from 'src/users/entities/user.entity';
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  ManyToMany,
+} from 'typeorm';
 import { Recipe } from '../../recipe/entities/recipe.entity';
 
 @Entity()
@@ -7,7 +13,7 @@ export class Selection {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Recipe)
+  @ManyToMany(() => Recipe)
   recipes: Recipe[];
 
   @ManyToOne(() => User)

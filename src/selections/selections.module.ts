@@ -9,5 +9,6 @@ import { RecipeModule } from '../recipe/recipe.module';
   imports: [TypeOrmModule.forFeature([Selection]), RecipeModule],
   controllers: [SelectionsController],
   providers: [SelectionsService],
+  exports: [SelectionsService],
 })
 export class SelectionsModule {}

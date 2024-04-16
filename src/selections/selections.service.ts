@@ -105,11 +105,17 @@ export class SelectionsService {
   }
 
   async findOneSelectionByUserId(user: User) {
-    const selection = await this.selectionRepository.findOne({
+    const selection = await this.selectionRepository.find({
+      relations: {
+        id_user: true,
+      },
       where: {
         id_user: user,
       },
     });
+    if (!selection) {
+      throw new NotFoundException("This selection doesn't exist");
+    }
     return selection;
   }
 }

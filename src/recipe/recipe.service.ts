@@ -20,7 +20,6 @@ export class RecipeService {
   }
 
   async findOneRecipeByOwnerId(owner: User): Promise<Recipe[]> {
-    console.log(owner);
     const recipes = await this.recipeRepository.findBy({ owner });
     if (!recipes) {
       throw new NotFoundException("This recipe doesn't exist");
