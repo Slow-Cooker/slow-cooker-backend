@@ -49,7 +49,7 @@ export class SelectionsController {
 
   @Get('/recipe/:id_selection')
   async findAllRecipeInSelection(@Param('id_selection') id_selection: string) {
-    const selection = await this.findOne(id_selection);
+    const selection = await this.selectionsService.findOne(id_selection);
     const recipeInSelection = selection.recipes;
     return recipeInSelection;
   }
@@ -62,10 +62,26 @@ export class SelectionsController {
     if (!recipe) {
       throw new NotFoundException("This recipe doesn't exist");
     }
-    console.log('recipe: ', recipe);
     const newSelection = await this.selectionsService.updateRecipe(
       id_selection,
       recipe,
+      false,
+    );
+    return newSelection;
+  }
+  @Delete(':id_selection/:id_recipe')
+  async removeRecipe(
+    @Param('id_recipe') id_recipe: string,
+    @Param('id_selection') id_selection: string,
+  ) {
+    const recipe = await this.recipeService.findOne(id_recipe);
+    if (!recipe) {
+      throw new NotFoundException("This recipe doesn't exist");
+    }
+    const newSelection = await this.selectionsService.updateRecipe(
+      id_selection,
+      recipe,
+      true,
     );
     return newSelection;
   }

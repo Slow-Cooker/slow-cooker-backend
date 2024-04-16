@@ -48,37 +48,51 @@ export class SelectionsService {
     const selection1 = await this.selectionRepository.save(updatedSelection);
     return selection1;
   }
-  async updateRecipe(id_selection: string, recipe?: Recipe) {
-    const selection = await this.selectionRepository.findOneBy({
-      id: id_selection,
+  async updateRecipe(
+    id_selection: string,
+    recipe: Recipe,
+    deleteRecipe: boolean,
+  ) {
+    const selection = await this.selectionRepository.findOne({
+      where: { id: id_selection },
     });
+
     if (!selection) {
       throw new NotFoundException("This selection doesn't exist");
     }
-    let updatedRecipes: Recipe[] = [];
-    if (selection.recipes) updatedRecipes = selection.recipes;
-    // Verify if we need to delete or add a recipe
-    if (recipe) {
-      updatedRecipes.push(recipe);
+
+    let updatedRecipes: Recipe[] = selection.recipes || [];
+    if (deleteRecipe) {
+      // Filter out the recipe to be deleted from updatedRecipes
+      updatedRecipes = updatedRecipes.filter(
+        (r) => r.id_recipe !== recipe.id_recipe,
+      );
     } else {
-      updatedRecipes.pop();
+      // Check if the recipe already exists, and if not, add it
+      const existingRecipeIndex = updatedRecipes.findIndex(
+        (r) => r.id_recipe === recipe.id_recipe,
+      );
+      if (existingRecipeIndex === -1) {
+        updatedRecipes.push(recipe);
+      } else {
+        updatedRecipes[existingRecipeIndex] = recipe; // Update existing recipe
+      }
     }
-    // Update the selection entity with the new recipes array
-    const updatedSelection = await this.selectionRepository.update(
-      { id: id_selection },
-      { recipes: updatedRecipes },
-    );
+    console.log('Before merge:', selection);
+    const updatedSelection = this.selectionRepository.insert(selection, {
+      id: selection.id,
+      recipes: updatedRecipes,
+      id_user: selection.id_user,
+      name: selection.name,
+    });
+    console.log('After merge:', updatedSelection);
     if (!updatedSelection) {
       throw new NotFoundException(
         'Failed to insert/delete the recipe in the selection',
       );
     }
-    // Fetch the updated selection after the update
-    const finalSelection = await this.selectionRepository.findOneBy({
-      id: id_selection,
-    });
-
-    return finalSelection;
+    console.log(updatedSelection.recipes);
+    return updatedSelection;
   }
 
   async remove(id: string) {
