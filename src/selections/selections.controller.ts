@@ -9,11 +9,14 @@ import {
 } from '@nestjs/common';
 import { SelectionsService } from './selections.service';
 import { CreateSelectionDto } from './dto/create-selection.dto';
-import { UpdateRecipeDto } from '../recipe/dto/update-recipe.dto';
-
+import { UpdateSelectionDto } from './dto/update-selection.dto';
+import { RecipeService } from '../recipe/recipe.service';
 @Controller('selection')
 export class CommentController {
-  constructor(private readonly selectionsService: SelectionsService) {}
+  constructor(
+    private readonly selectionsService: SelectionsService,
+    private readonly recipeService: RecipeService,
+  ) {}
 
   @Post()
   create(@Body() createSelectionDto: CreateSelectionDto) {
@@ -31,8 +34,11 @@ export class CommentController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRecipeDto: UpdateRecipeDto) {
-    return this.selectionsService.update(id, updateRecipeDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateSelectionDto: UpdateSelectionDto,
+  ) {
+    return this.selectionsService.update(id, updateSelectionDto);
   }
 
   @Delete(':id')

@@ -14,7 +14,7 @@ export class Selection {
   id: string;
 
   @ManyToMany(() => Recipe)
-  id_recipe: Recipe[];
+  recipes: Recipe[];
 
   @ManyToOne(() => User)
   id_user: User;
