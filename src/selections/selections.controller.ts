@@ -6,13 +6,14 @@ import {
   Param,
   Delete,
   Patch,
+  NotFoundException,
 } from '@nestjs/common';
 import { SelectionsService } from './selections.service';
 import { CreateSelectionDto } from './dto/create-selection.dto';
 import { UpdateSelectionDto } from './dto/update-selection.dto';
 import { RecipeService } from '../recipe/recipe.service';
 @Controller('selection')
-export class CommentController {
+export class SelectionsController {
   constructor(
     private readonly selectionsService: SelectionsService,
     private readonly recipeService: RecipeService,
@@ -44,5 +45,28 @@ export class CommentController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.selectionsService.remove(id);
+  }
+
+  @Get('/recipe/:id_selection')
+  async findAllRecipeInSelection(@Param('id_selection') id_selection: string) {
+    const selection = await this.findOne(id_selection);
+    const recipeInSelection = selection.recipes;
+    return recipeInSelection;
+  }
+  @Post(':id_selection/:id_recipe')
+  async postRecipeInSelection(
+    @Param('id_recipe') id_recipe: string,
+    @Param('id_selection') id_selection: string,
+  ) {
+    const recipe = await this.recipeService.findOne(id_recipe);
+    if (!recipe) {
+      throw new NotFoundException("This recipe doesn't exist");
+    }
+    console.log('recipe: ', recipe);
+    const newSelection = await this.selectionsService.updateRecipe(
+      id_selection,
+      recipe,
+    );
+    return newSelection;
   }
 }
