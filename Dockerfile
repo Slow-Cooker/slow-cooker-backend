@@ -8,4 +8,4 @@ WORKDIR /app
 CMD tail -f /dev/null
 #docker compose up --build
 #docker compose exec app bash
-
+#npm run start:dev
