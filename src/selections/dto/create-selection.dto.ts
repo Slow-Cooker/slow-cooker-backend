@@ -1,13 +1,14 @@
-import { IsNotEmpty, IsString } from 'class-validator';
-import { User } from 'src/users/entities/user.entity';
-import { Recipe } from 'src/recipe/entities/recipe.entity';
+import { ArrayNotEmpty, IsArray, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class CreateSelectionDto {
   @IsNotEmpty()
-  user: User;
+  @IsUUID()
+  userId: string;
 
-  @IsNotEmpty()
-  recipes: Recipe[];
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsUUID(4, { each: true })
+  recipeIds: string[];
 
   @IsNotEmpty()
   @IsString()

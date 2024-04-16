@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   ManyToMany,
+  JoinTable
 } from 'typeorm';
 import { Recipe } from '../../recipe/entities/recipe.entity';
 
@@ -13,11 +14,12 @@ export class Selection {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToMany(() => Recipe)
+  @ManyToMany(() => Recipe, recipe => recipe.selections, {cascade: true})
+  @JoinTable()
   recipes: Recipe[];
 
   @ManyToOne(() => User)
-  id_user: User;
+  user: User;
 
   @Column()
   name: string;

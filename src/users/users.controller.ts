@@ -56,7 +56,7 @@ export class UsersController {
     const user = request['user'] as User;
     const recipe = await this.recipeService.findOneRecipeByOwnerId(user);
     const selection =
-      await this.selectionService.findOneSelectionByUserId(user);
+      await this.selectionService.findSelectionsByUserId(user.id);
     console.log(selection);
     return {
       id: user.id,

@@ -1,5 +1,6 @@
+import { Selection } from 'src/selections/entities/selection.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
 
 export enum Difficulty {
   Weak = 'Weak',
@@ -37,4 +38,7 @@ export class Recipe {
 
   @Column()
   validate: boolean;
+
+  @ManyToMany(() => Selection, selection => selection.recipes)
+  selections: Selection[];
 }

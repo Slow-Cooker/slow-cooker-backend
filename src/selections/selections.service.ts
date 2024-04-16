@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateSelectionDto } from './dto/create-selection.dto';
-import { UpdateSelectionDto } from './dto/update-selection.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreateSelectionDto } from './dto/create-selection.dto';
+import { UpdateSelectionDto } from './dto/update-selection.dto';
 import { Selection } from './entities/selection.entity';
 import { Recipe } from '../recipe/entities/recipe.entity';
 import { User } from '../users/entities/user.entity';
@@ -12,23 +12,40 @@ export class SelectionsService {
   constructor(
     @InjectRepository(Selection)
     private readonly selectionRepository: Repository<Selection>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    @InjectRepository(Recipe)
+    private readonly recipeRepository: Repository<Recipe>,
   ) {}
-  async create(createSelection: CreateSelectionDto) {
-    const newSelection = this.selectionRepository.create(createSelection);
-    const selection = await this.selectionRepository.save(newSelection);
-    return selection;
+
+  async create(createSelectionDto: CreateSelectionDto): Promise<Selection> {
+    const user = await this.userRepository.findOneBy({ id: createSelectionDto.userId });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const recipes = await this.recipeRepository.findByIds(createSelectionDto.recipeIds);
+    if (recipes.length !== createSelectionDto.recipeIds.length) {
+      throw new NotFoundException('One or more recipes could not be found');
+    }
+
+    const newSelection = this.selectionRepository.create({
+      name: createSelectionDto.name,
+      user: user,
+      recipes: recipes
+    });
+
+    return this.selectionRepository.save(newSelection);
   }
 
-  async findAll() {
-    const selections = await this.selectionRepository.find();
-    return selections;
+  async findAll(): Promise<Selection[]> {
+    return this.selectionRepository.find({ relations: ['recipes', 'user'] });
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<Selection> {
     const selection = await this.selectionRepository.findOne({
-      where: {
-        id: id,
-      },
+      where: { id },
+      relations: ['recipes', 'user'],
     });
     if (!selection) {
       throw new NotFoundException("This selection doesn't exist");
@@ -36,86 +53,46 @@ export class SelectionsService {
     return selection;
   }
 
-  async update(id: string, updateSelectionDto: UpdateSelectionDto) {
-    const selection = await this.selectionRepository.findOneBy({ id: id });
-    if (!selection) {
-      throw new NotFoundException("This selection doesn't exist");
-    }
-    const updatedSelection = this.selectionRepository.merge(
-      selection,
-      updateSelectionDto,
-    );
-    const selection1 = await this.selectionRepository.save(updatedSelection);
-    return selection1;
+  async update(id: string, updateSelectionDto: UpdateSelectionDto): Promise<Selection> {
+    const selection = await this.findOne(id);
+    this.selectionRepository.merge(selection, updateSelectionDto);
+    return this.selectionRepository.save(selection);
   }
-  async updateRecipe(
-    id_selection: string,
-    recipe: Recipe,
-    deleteRecipe: boolean,
-  ) {
-    const selection = await this.selectionRepository.findOne({
-      where: { id: id_selection },
-    });
 
+  async updateRecipes(id: string, recipeIds: string[], deleteRecipe: boolean): Promise<Selection> {
+    const selection = await this.findOne(id);
+    
     if (!selection) {
-      throw new NotFoundException("This selection doesn't exist");
+      throw new NotFoundException('Selection not found');
     }
-
-    let updatedRecipes: Recipe[] = selection.recipes || [];
     if (deleteRecipe) {
-      // Filter out the recipe to be deleted from updatedRecipes
-      updatedRecipes = updatedRecipes.filter(
-        (r) => r.id_recipe !== recipe.id_recipe,
-      );
+      selection.recipes = selection.recipes.filter(recipe => !recipeIds.includes(recipe.id_recipe));
     } else {
-      // Check if the recipe already exists, and if not, add it
-      const existingRecipeIndex = updatedRecipes.findIndex(
-        (r) => r.id_recipe === recipe.id_recipe,
+      const newRecipes = await this.recipeRepository.findByIds(recipeIds);
+      const filteredNewRecipes = newRecipes.filter(newRecipe => 
+        !selection.recipes.some(existingRecipe => existingRecipe.id_recipe === newRecipe.id_recipe)
       );
-      if (existingRecipeIndex === -1) {
-        updatedRecipes.push(recipe);
-      } else {
-        updatedRecipes[existingRecipeIndex] = recipe; // Update existing recipe
-      }
+      selection.recipes = [...selection.recipes, ...filteredNewRecipes];
     }
-    console.log('Before merge:', selection);
-    const updatedSelection = this.selectionRepository.merge(selection, {
-      id: selection.id,
-      recipes: updatedRecipes,
-      id_user: selection.id_user,
-      name: selection.name,
-    });
-    console.log('After merge:', updatedSelection);
-    if (!updatedSelection) {
-      throw new NotFoundException(
-        'Failed to insert/delete the recipe in the selection',
-      );
-    }
-    console.log(updatedSelection.recipes);
-    return updatedSelection;
+  
+    return this.selectionRepository.save(selection);
+  }
+  
+
+  async remove(id: string): Promise<string> {
+    const selection = await this.findOne(id);
+    await this.selectionRepository.delete(id);
+    return `Selection ${id} has been removed`;
   }
 
-  async remove(id: string) {
-    const selection = await this.selectionRepository.findOneBy({ id: id });
-    if (!selection) {
-      throw new NotFoundException("This selection doesn't exist");
-    }
-    this.selectionRepository.delete(selection.id);
-    return `This action removes a #${id} selection`;
-  }
-
-  async findOneSelectionByUserId(user: User) {
-    const selection = await this.selectionRepository.find({
-      relations: {
-        id_user: true,
-      },
-      where: {
-        id_user: user,
-      },
+  async findSelectionsByUserId(userId: string): Promise<Selection[]> {
+    const selections = await this.selectionRepository.find({
+      where: { user: { id: userId } },
+      relations: ['recipes', 'user'],
     });
-    if (!selection) {
-      throw new NotFoundException("This selection doesn't exist");
+    if (!selections) {
+      throw new NotFoundException("This user has no selections");
     }
-    return selection;
+    return selections;
   }
 }

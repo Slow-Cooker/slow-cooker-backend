@@ -3,12 +3,14 @@ import { SelectionsService } from './selections.service';
 import { SelectionsController } from './selections.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Selection } from './entities/selection.entity';
-import { RecipeModule } from '../recipe/recipe.module';
+import { User } from 'src/users/entities/user.entity';
+import { Recipe } from 'src/recipe/entities/recipe.entity';
+import { RecipeService } from 'src/recipe/recipe.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Selection]), RecipeModule],
+  imports: [TypeOrmModule.forFeature([Selection, Recipe, User])],
   controllers: [SelectionsController],
-  providers: [SelectionsService],
-  exports: [SelectionsService],
+  providers: [SelectionsService, RecipeService],
+  exports: [SelectionsService, RecipeService],
 })
 export class SelectionsModule {}
