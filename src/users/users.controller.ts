@@ -19,6 +19,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { Public } from './auth/auth.guard';
 import { Request as ExpressRequest } from 'express';
 import { RecipeService } from '../recipe/recipe.service';
+import { SelectionsService } from '../selections/selections.service';
 
 @Controller('users')
 export class UsersController {
@@ -26,9 +27,10 @@ export class UsersController {
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
     private readonly recipeService: RecipeService,
+    private readonly selectionService: SelectionsService,
   ) {}
 
-  // Route de connexion des utilisateurs coucou
+  // Route de connexion des utilisateurs (sign-up)
   @Public()
   @Post('auth/sign-up')
   @UsePipes(new ValidationPipe())
@@ -53,12 +55,15 @@ export class UsersController {
   async getMyUserInfo(@Request() request: ExpressRequest) {
     const user = request['user'] as User;
     const recipe = await this.recipeService.findOneRecipeByOwnerId(user);
+    const selection =
+      await this.selectionService.findOneSelectionByUserId(user);
     return {
       id: user.id,
       username: user.username,
       email: user.email,
       role: user.role,
       recipe: recipe,
+      selection: selection,
     };
   }
 

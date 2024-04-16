@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Selection } from './entities/selection.entity';
 import { Recipe } from '../recipe/entities/recipe.entity';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class SelectionsService {
@@ -62,13 +63,11 @@ export class SelectionsService {
     } else {
       updatedRecipes.pop();
     }
-    console.log('updatedRecipes', updatedRecipes);
     // Update the selection entity with the new recipes array
     const updatedSelection = await this.selectionRepository.update(
       { id: id_selection },
       { recipes: updatedRecipes },
     );
-    console.log('coucou');
     if (!updatedSelection) {
       throw new NotFoundException(
         'Failed to insert/delete the recipe in the selection',
@@ -89,5 +88,14 @@ export class SelectionsService {
     }
     this.selectionRepository.delete(selection.id);
     return `This action removes a #${id} selection`;
+  }
+
+  async findOneSelectionByUserId(user: User) {
+    const selection = await this.selectionRepository.findOne({
+      where: {
+        id_user: user,
+      },
+    });
+    return selection;
   }
 }

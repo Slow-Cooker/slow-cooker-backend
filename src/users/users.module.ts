@@ -7,9 +7,15 @@ import { User } from './entities/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { JwtService } from '@nestjs/jwt';
 import { RecipeModule } from '../recipe/recipe.module';
+import { SelectionsModule } from '../selections/selections.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), AuthModule, RecipeModule],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    AuthModule,
+    RecipeModule,
+    SelectionsModule,
+  ],
   controllers: [UsersController],
   providers: [UsersService, JwtService],
   exports: [UsersService],
