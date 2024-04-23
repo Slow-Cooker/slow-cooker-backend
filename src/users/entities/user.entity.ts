@@ -21,4 +21,7 @@ export class User {
 
   @Column({ default: UserRole.User })
   role: UserRole;
+
+  @Column()
+  profilepicture: string;
 }

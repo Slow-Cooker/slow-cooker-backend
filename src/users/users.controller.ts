@@ -56,8 +56,9 @@ export class UsersController {
   async getMyUserInfo(@Request() request: ExpressRequest) {
     const user = request['user'] as User;
     const recipe = await this.recipeService.findOneRecipeByOwnerId(user);
-    const selection =
-      await this.selectionService.findSelectionsByUserId(user.id);
+    const selection = await this.selectionService.findSelectionsByUserId(
+      user.id,
+    );
     console.log(selection);
     return {
       id: user.id,
@@ -66,6 +67,7 @@ export class UsersController {
       role: user.role,
       recipe: recipe,
       selection: selection,
+      profilepicture: user.profilepicture,
     };
   }
 

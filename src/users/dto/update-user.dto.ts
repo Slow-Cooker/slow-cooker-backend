@@ -18,4 +18,8 @@ export class UpdateUserDto {
   @IsOptional()
   @IsEnum(['User', 'Admin'])
   role?: 'User' | 'Admin';
+
+  @IsOptional()
+  @IsString()
+  profilepicture?: string;
 }
