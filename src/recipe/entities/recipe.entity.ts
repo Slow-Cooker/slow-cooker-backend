@@ -32,6 +32,9 @@ export class Recipe {
   name_recipe: string;
 
   @Column()
+  steps: string;
+
+  @Column()
   difficulty: Difficulty;
 
   @Column()
