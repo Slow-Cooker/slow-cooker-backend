@@ -21,6 +21,10 @@ export class UpdateRecipeDto extends PartialType(CreateRecipeDto) {
   duration?: string;
 
   @IsOptional()
+  @IsString()
+  image?: string;
+
+  @IsOptional()
   @IsBoolean()
   validate?: boolean;
 }

@@ -35,15 +35,16 @@ export class UsersController {
   @Post('auth/sign-up')
   @UsePipes(new ValidationPipe())
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
+    console.log(createUserDto);
     return this.usersService.create(createUserDto);
   }
 
   //Route de login
   @Public()
   @Post('auth/login')
-  async login(@Body() dto: LoginUserDto): Promise<{ access_token: string }> {
+  async login(@Body() dto: LoginUserDto) {
     const access_token = await this.authService.signIn(dto);
-    return { access_token };
+    return access_token;
   }
 
   @Get()

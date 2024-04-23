@@ -39,6 +39,9 @@ export class Recipe {
   @Column()
   validate: boolean;
 
+  @Column()
+  image: string;
+
   @ManyToMany(() => Selection, selection => selection.recipes)
   selections: Selection[];
 }

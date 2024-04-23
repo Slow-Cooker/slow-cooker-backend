@@ -2,6 +2,7 @@ import {
   IsBoolean,
   IsEnum,
   IsNotEmpty,
+  IsOptional,
   IsString,
   MinLength,
 } from 'class-validator';
@@ -28,6 +29,10 @@ export class CreateRecipeDto {
   @IsNotEmpty()
   @IsString()
   duration: string;
+
+  @IsOptional()
+  @IsString()
+  image: string;
 
   @IsNotEmpty()
   @IsBoolean()

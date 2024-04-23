@@ -12,15 +12,15 @@ export class AuthService {
     private jwt: JwtService,
   ) {}
 
-  async signIn(dto: LoginUserDto): Promise<string> {
+  async signIn(dto: LoginUserDto) {
     const user = await this.users.findByEmail(dto.email);
-
     if (!user || !(await Argon2.verify(user.password, dto.password))) {
       throw new UnauthorizedException();
     }
-
-    return this.jwt.signAsync({ sub: user.id }, {});
-  }
+    
+    const token = await this.jwt.signAsync({ sub: user.id });
+    return { token, user };
+}
 
   async authFromToken(token: string) {
     const payload = await this.jwt.verifyAsync(token);
