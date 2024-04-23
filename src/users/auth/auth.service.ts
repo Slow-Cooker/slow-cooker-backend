@@ -13,14 +13,22 @@ export class AuthService {
   ) {}
 
   async signIn(dto: LoginUserDto) {
+    // Find user by email
     const user = await this.users.findByEmail(dto.email);
+
+    // Check if user exists and verify password
     if (!user || !(await Argon2.verify(user.password, dto.password))) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException(); // Throw an unauthorized exception if credentials are invalid
     }
-    
+
+    // Generate JWT token
     const token = await this.jwt.signAsync({ sub: user.id });
-    return { token, user };
-}
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userWithoutPassword } = user;
+
+    return { token, user: userWithoutPassword }; // Return token and user data without the password
+  }
 
   async authFromToken(token: string) {
     const payload = await this.jwt.verifyAsync(token);
