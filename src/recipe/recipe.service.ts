@@ -36,6 +36,16 @@ export class RecipeService {
     return recipes;
   }
 
+  async findAllAdmin() {
+    const recipes = await this.recipeRepository
+      .createQueryBuilder('recipe')
+      .leftJoinAndSelect('recipe.owner', 'owner')
+      .where('recipe.validate = false')
+      .getMany();
+    console.log(recipes);
+    return recipes;
+  }
+
   async findOne(id: string) {
     const recipe = await this.recipeRepository
       .createQueryBuilder('recipe')

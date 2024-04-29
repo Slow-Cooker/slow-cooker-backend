@@ -25,6 +25,11 @@ export class RecipeController {
     return this.recipeService.findAll();
   }
 
+  @Get('/all')
+  findAllAdmin() {
+    return this.recipeService.findAllAdmin();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.recipeService.findOne(id);
