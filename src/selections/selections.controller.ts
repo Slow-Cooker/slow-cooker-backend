@@ -12,7 +12,7 @@ import { SelectionsService } from './selections.service';
 import { CreateSelectionDto } from './dto/create-selection.dto';
 import { UpdateSelectionDto } from './dto/update-selection.dto';
 import { RecipeService } from '../recipe/recipe.service';
-@Controller('selection')
+@Controller('selections')
 export class SelectionsController {
   constructor(
     private readonly selectionsService: SelectionsService,
