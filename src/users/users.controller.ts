@@ -35,7 +35,6 @@ export class UsersController {
   @Post('auth/sign-up')
   @UsePipes(new ValidationPipe())
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
-    console.log(createUserDto);
     return this.usersService.create(createUserDto);
   }
 
@@ -58,7 +57,6 @@ export class UsersController {
     const recipe = await this.recipeService.findOneRecipeByOwnerId(user);
     const selection =
       await this.selectionService.findSelectionsByUserId(user.id);
-    console.log(selection);
     return {
       id: user.id,
       username: user.username,

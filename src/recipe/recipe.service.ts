@@ -29,7 +29,6 @@ export class RecipeService {
 
   async findAll() {
     const allRecipe = await this.recipeRepository.find();
-    console.log(allRecipe)
     return allRecipe;
   }
 

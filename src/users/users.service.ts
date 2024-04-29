@@ -20,7 +20,6 @@ export class UsersService {
     });
     const inserteddata = await this.userRepository.save(newUser);
     delete inserteddata.password;
-    console.log(inserteddata)
     return inserteddata;
   }
 
