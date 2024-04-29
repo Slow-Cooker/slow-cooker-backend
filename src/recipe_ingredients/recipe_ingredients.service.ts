@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRecipeIngredientDto } from './dto/create-recipe_ingredient.dto';
 import { UpdateRecipeIngredientDto } from './dto/update-recipe_ingredient.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,6 +13,19 @@ export class RecipeIngredientsService {
   ) {}
 
   async create(createRecipeIngredientDto: CreateRecipeIngredientDto) {
+    const existingRecipeIngredient = await this.recipeIngredientsRepository.findOne({
+      where: {
+        recipe: {
+          id_recipe: createRecipeIngredientDto.recipe.id_recipe
+        },
+        ingredient:{
+          id_ingredient: createRecipeIngredientDto.ingredient.id_ingredient
+        },
+      },
+    });
+    if (existingRecipeIngredient) {
+      throw new ConflictException('This recipe ingredient already exist');
+    }
     const newRecipeIngredient = this.recipeIngredientsRepository.create(
       createRecipeIngredientDto,
     );
@@ -46,23 +59,26 @@ export class RecipeIngredientsService {
     return `This action removes a #${id} RecipeIngredient`;
   }
 
-  async update(
-    id: string,
-    updateRecipeIngredientDto: UpdateRecipeIngredientDto,
-  ) {
-    const recipeIngredient = await this.recipeIngredientsRepository.findOneBy({
-      id: id,
-    });
+  async update(id: string, updateRecipeIngredientDto: UpdateRecipeIngredientDto){
+    const recipeIngredient = await this.recipeIngredientsRepository.findOneBy({ id });
     if (!recipeIngredient) {
-      throw new NotFoundException("This recipeIngredient dosen't exist");
+      throw new NotFoundException("This recipeIngredient does not exist");
     }
-    const updatedRecipeIngredient = this.recipeIngredientsRepository.merge(
-      recipeIngredient,
-      updateRecipeIngredientDto,
-    );
-    const saveRecipeIngredient = await this.recipeIngredientsRepository.save(
-      updatedRecipeIngredient,
-    );
-    return saveRecipeIngredient;
+
+    // Check what properties in DTO are defined and should be updated
+    const updateData = {};
+    if (updateRecipeIngredientDto.quantity !== undefined) {
+      updateData['quantity'] = updateRecipeIngredientDto.quantity;
+    }
+    if (updateRecipeIngredientDto.unit !== undefined) {
+      updateData['unit'] = updateRecipeIngredientDto.unit;
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      throw new Error("No valid update parameters were provided");
+    }
+
+    // Perform the update
+    return this.recipeIngredientsRepository.update(id, updateData);
   }
 }
