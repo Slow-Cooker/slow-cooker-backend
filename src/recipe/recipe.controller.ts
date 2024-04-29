@@ -11,7 +11,7 @@ import { RecipeService } from './recipe.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
 
-@Controller('recipe')
+@Controller('recipes')
 export class RecipeController {
   constructor(private readonly recipeService: RecipeService) {}
 
@@ -23,6 +23,11 @@ export class RecipeController {
   @Get()
   findAll() {
     return this.recipeService.findAll();
+  }
+
+  @Get('/all')
+  findAllAdmin() {
+    return this.recipeService.findAllAdmin();
   }
 
   @Get(':id')

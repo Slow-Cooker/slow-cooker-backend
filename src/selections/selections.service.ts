@@ -19,12 +19,16 @@ export class SelectionsService {
   ) {}
 
   async create(createSelectionDto: CreateSelectionDto): Promise<Selection> {
-    const user = await this.userRepository.findOneBy({ id: createSelectionDto.userId });
+    const user = await this.userRepository.findOneBy({
+      id: createSelectionDto.userId,
+    });
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    const recipes = await this.recipeRepository.findByIds(createSelectionDto.recipeIds);
+    const recipes = await this.recipeRepository.findByIds(
+      createSelectionDto.recipeIds,
+    );
     if (recipes.length !== createSelectionDto.recipeIds.length) {
       throw new NotFoundException('One or more recipes could not be found');
     }
@@ -32,7 +36,7 @@ export class SelectionsService {
     const newSelection = this.selectionRepository.create({
       name: createSelectionDto.name,
       user: user,
-      recipes: recipes
+      recipes: recipes,
     });
 
     return this.selectionRepository.save(newSelection);
@@ -53,31 +57,43 @@ export class SelectionsService {
     return selection;
   }
 
-  async update(id: string, updateSelectionDto: UpdateSelectionDto): Promise<Selection> {
+  async update(
+    id: string,
+    updateSelectionDto: UpdateSelectionDto,
+  ): Promise<Selection> {
     const selection = await this.findOne(id);
     this.selectionRepository.merge(selection, updateSelectionDto);
     return this.selectionRepository.save(selection);
   }
 
-  async updateRecipes(id: string, recipeIds: string[], deleteRecipe: boolean): Promise<Selection> {
+  async updateRecipes(
+    id: string,
+    recipeIds: string[],
+    deleteRecipe: boolean,
+  ): Promise<Selection> {
     const selection = await this.findOne(id);
-    
+
     if (!selection) {
       throw new NotFoundException('Selection not found');
     }
     if (deleteRecipe) {
-      selection.recipes = selection.recipes.filter(recipe => !recipeIds.includes(recipe.id_recipe));
+      selection.recipes = selection.recipes.filter(
+        (recipe) => !recipeIds.includes(recipe.id_recipe),
+      );
     } else {
       const newRecipes = await this.recipeRepository.findByIds(recipeIds);
-      const filteredNewRecipes = newRecipes.filter(newRecipe => 
-        !selection.recipes.some(existingRecipe => existingRecipe.id_recipe === newRecipe.id_recipe)
+      const filteredNewRecipes = newRecipes.filter(
+        (newRecipe) =>
+          !selection.recipes.some(
+            (existingRecipe) =>
+              existingRecipe.id_recipe === newRecipe.id_recipe,
+          ),
       );
       selection.recipes = [...selection.recipes, ...filteredNewRecipes];
     }
-  
+
     return this.selectionRepository.save(selection);
   }
-  
 
   async remove(id: string): Promise<string> {
     const selection = await this.findOne(id);
@@ -91,7 +107,7 @@ export class SelectionsService {
       relations: ['recipes', 'user'],
     });
     if (!selections) {
-      throw new NotFoundException("This user has no selections");
+      throw new NotFoundException('This user has no selections');
     }
     return selections;
   }

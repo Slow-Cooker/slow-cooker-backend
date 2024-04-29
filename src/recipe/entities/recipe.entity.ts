@@ -1,6 +1,12 @@
 import { Selection } from 'src/selections/entities/selection.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  ManyToMany,
+} from 'typeorm';
 
 export enum Difficulty {
   Weak = 'Weak',
@@ -25,6 +31,9 @@ export class Recipe {
   name_recipe: string;
 
   @Column()
+  steps: string;
+
+  @Column()
   difficulty: Difficulty;
 
   @Column()
@@ -42,6 +51,6 @@ export class Recipe {
   @Column()
   image: string;
 
-  @ManyToMany(() => Selection, selection => selection.recipes)
+  @ManyToMany(() => Selection, (selection) => selection.recipes)
   selections: Selection[];
 }

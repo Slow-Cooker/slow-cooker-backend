@@ -28,19 +28,34 @@ export class RecipeService {
   }
 
   async findAll() {
-    const allRecipe = await this.recipeRepository.find();
-    return allRecipe;
+    const recipes = await this.recipeRepository
+      .createQueryBuilder('recipe')
+      .leftJoinAndSelect('recipe.owner', 'owner')
+      .getMany();
+    console.log(recipes);
+    return recipes;
+  }
+
+  async findAllAdmin() {
+    const recipes = await this.recipeRepository
+      .createQueryBuilder('recipe')
+      .leftJoinAndSelect('recipe.owner', 'owner')
+      .where('recipe.validate = false')
+      .getMany();
+    console.log(recipes);
+    return recipes;
   }
 
   async findOne(id: string) {
-    const recipe = await this.recipeRepository.findOne({
-      where: {
-        id_recipe: id,
-      },
-    });
+    const recipe = await this.recipeRepository
+      .createQueryBuilder('recipe')
+      .leftJoinAndSelect('recipe.owner', 'owner')
+      .where('recipe.id_recipe = :id', { id })
+      .getOne();
     if (!recipe) {
       throw new NotFoundException("This recipe doesn't exist");
     }
+    console.log(recipe);
     return recipe;
   }
 

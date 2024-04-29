@@ -12,7 +12,7 @@ import { SelectionsService } from './selections.service';
 import { CreateSelectionDto } from './dto/create-selection.dto';
 import { UpdateSelectionDto } from './dto/update-selection.dto';
 import { RecipeService } from '../recipe/recipe.service';
-@Controller('selection')
+@Controller('selections')
 export class SelectionsController {
   constructor(
     private readonly selectionsService: SelectionsService,
@@ -54,36 +54,36 @@ export class SelectionsController {
     return recipeInSelection;
   }
   @Post(':id_selection/:id_recipe')
-async postRecipeInSelection(
+  async postRecipeInSelection(
     @Param('id_recipe') id_recipe: string,
     @Param('id_selection') id_selection: string,
-) {
+  ) {
     const recipe = await this.recipeService.findOne(id_recipe);
     if (!recipe) {
-        throw new NotFoundException("This recipe doesn't exist");
+      throw new NotFoundException("This recipe doesn't exist");
     }
     const newSelection = await this.selectionsService.updateRecipes(
-        id_selection,
-        [recipe.id_recipe],  // Assuming recipe.id is the ID of the recipe
-        false,
+      id_selection,
+      [recipe.id_recipe], // Assuming recipe.id is the ID of the recipe
+      false,
     );
     return newSelection;
-}
+  }
 
-@Delete(':id_selection/:id_recipe')
-async removeRecipe(
+  @Delete(':id_selection/:id_recipe')
+  async removeRecipe(
     @Param('id_recipe') id_recipe: string,
     @Param('id_selection') id_selection: string,
-) {
+  ) {
     const recipe = await this.recipeService.findOne(id_recipe);
     if (!recipe) {
-        throw new NotFoundException("This recipe doesn't exist");
+      throw new NotFoundException("This recipe doesn't exist");
     }
     const newSelection = await this.selectionsService.updateRecipes(
-        id_selection,
-        [recipe.id_recipe],  // Passing only the ID
-        true,
+      id_selection,
+      [recipe.id_recipe], // Passing only the ID
+      true,
     );
     return newSelection;
-}
+  }
 }

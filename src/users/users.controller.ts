@@ -64,6 +64,7 @@ export class UsersController {
       role: user.role,
       recipe: recipe,
       selection: selection,
+      profilepicture: user.profilepicture,
     };
   }
 
