@@ -25,6 +25,11 @@ export class IngredientController {
     return this.ingredientService.findOne(id);
   }
 
+  @Get()
+  findAll() {
+    return this.ingredientService.findAll();
+  }
+
   @Patch(':id')
   update(
     @Param('id') id: string,

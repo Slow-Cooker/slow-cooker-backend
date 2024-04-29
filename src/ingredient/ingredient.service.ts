@@ -39,6 +39,11 @@ export class IngredientService {
     return ingredient;
   }
 
+  async findAll() {
+    const ingredient = await this.ingredientRepository.find();
+    return ingredient;
+  }
+
   async update(id: string, updateIngredientDto: UpdateIngredientDto) {
     const ingredient = await this.ingredientRepository.findOneBy({
       id_ingredient: id,
