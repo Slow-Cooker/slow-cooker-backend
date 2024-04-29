@@ -8,14 +8,6 @@ export class UpdateRecipeIngredientDto extends PartialType(
   CreateRecipeIngredientDto,
 ) {
   @IsOptional()
-  @IsEnum(Ingredient)
-  ingredient?: Ingredient;
-
-  @IsOptional()
-  @IsEnum(Recipe)
-  recipe?: Recipe;
-
-  @IsOptional()
   @IsNumber()
   quantity?: number;
 
