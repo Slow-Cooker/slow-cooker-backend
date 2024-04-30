@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_DB: slow-cooker
       POSTGRES_PASSWORD: postgres
-    container_name: slowcooker
+    container_name: slow-cooker-db-pg
     volumes:
       - ./pgdata:/var/lib/postgresql/data
     ports:
@@ -15,7 +15,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: slow-cooker
+    container_name: slow-cooker-app
+    restart: 'always'
     environment:
       - PORT=${PORT}
       - DATABASE_HOST=db
@@ -23,7 +24,5 @@ services:
       - '3000:3000'
     depends_on:
       - db
-    volumes:
-      - '.:/app'
     env_file:
       - '.env'
