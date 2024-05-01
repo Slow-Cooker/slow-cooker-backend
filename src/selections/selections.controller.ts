@@ -26,7 +26,7 @@ export class SelectionsController {
     return this.selectionsService.create(createSelectionDto);
   }
 
-  @Get(":id")
+  @Get("user/:id")
   findAll(@Param('id') id: string) {
     console.log(id)
     return this.selectionsService.findAll(id);
