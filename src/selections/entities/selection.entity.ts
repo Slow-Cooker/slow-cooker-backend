@@ -14,7 +14,7 @@ export class Selection {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToMany(() => Recipe, (recipe) => recipe.selections, { cascade: true })
+  @ManyToMany(() => Recipe, (recipe) => recipe.selections, { cascade: true, nullable: true })
   @JoinTable()
   recipes: Recipe[];
 

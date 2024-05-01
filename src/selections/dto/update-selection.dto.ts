@@ -1,11 +1,16 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Recipe } from 'src/recipe/entities/recipe.entity';
 import { User } from 'src/users/entities/user.entity';
 
 export class UpdateSelectionDto {
   @IsNotEmpty()
   user: User;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  name: string;
+  name?: string;
+
+  @IsOptional()
+  @IsArray()
+  recipesIds?: string[]
 }
