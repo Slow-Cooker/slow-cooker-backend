@@ -1,4 +1,4 @@
-import { ArrayNotEmpty, IsArray, IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateSelectionDto {
   @IsNotEmpty()
@@ -6,9 +6,9 @@ export class CreateSelectionDto {
   userId: string;
 
   @IsArray()
-  @ArrayNotEmpty()
+  @IsOptional()
   @IsUUID(4, { each: true })
-  recipeIds: string[];
+  recipeIds?: string[];
 
   @IsNotEmpty()
   @IsString()

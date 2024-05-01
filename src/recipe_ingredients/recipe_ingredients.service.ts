@@ -39,6 +39,18 @@ export class RecipeIngredientsService {
     return allRecipeIngredient;
   }
 
+  async findAllinRecipe(recipeId: string) {
+    const allRecipeIngredient = await this.recipeIngredientsRepository.find({
+      where: {
+        recipe: {
+          id_recipe: recipeId
+        }
+      },
+      relations: ['ingredient', 'recipe']
+    });
+    return allRecipeIngredient;
+  }
+
   async findOne(id: string) {
     const recipeIngredient = await this.recipeIngredientsRepository.findOne({
       where: {

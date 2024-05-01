@@ -27,6 +27,11 @@ export class RecipeIngredientsController {
     return this.recipeIngredientsService.findAll();
   }
 
+  @Get('allIngredients/:recipeId')
+  findAllinRecipe(@Param('recipeId') recipeId: string) {
+    return this.recipeIngredientsService.findAllinRecipe(recipeId);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.recipeIngredientsService.findOne(id);

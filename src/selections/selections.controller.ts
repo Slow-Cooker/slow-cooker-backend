@@ -12,6 +12,7 @@ import { SelectionsService } from './selections.service';
 import { CreateSelectionDto } from './dto/create-selection.dto';
 import { UpdateSelectionDto } from './dto/update-selection.dto';
 import { RecipeService } from '../recipe/recipe.service';
+import { User } from 'src/users/entities/user.entity';
 @Controller('selections')
 export class SelectionsController {
   constructor(
@@ -21,12 +22,14 @@ export class SelectionsController {
 
   @Post()
   create(@Body() createSelectionDto: CreateSelectionDto) {
+    console.log(createSelectionDto)
     return this.selectionsService.create(createSelectionDto);
   }
 
-  @Get()
-  findAll() {
-    return this.selectionsService.findAll();
+  @Get(":id")
+  findAll(@Param('id') id: string) {
+    console.log(id)
+    return this.selectionsService.findAll(id);
   }
 
   @Get(':id')

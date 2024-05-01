@@ -26,11 +26,12 @@ export class SelectionsService {
       throw new NotFoundException('User not found');
     }
 
-    const recipes = await this.recipeRepository.findByIds(
-      createSelectionDto.recipeIds,
-    );
-    if (recipes.length !== createSelectionDto.recipeIds.length) {
-      throw new NotFoundException('One or more recipes could not be found');
+    let recipes = [];
+    if (createSelectionDto.recipeIds && createSelectionDto.recipeIds.length > 0) {
+      recipes = await this.recipeRepository.findByIds(createSelectionDto.recipeIds);
+      if (recipes.length !== createSelectionDto.recipeIds.length) {
+        throw new NotFoundException('One or more recipes could not be found');
+      }
     }
 
     const newSelection = this.selectionRepository.create({
@@ -42,8 +43,8 @@ export class SelectionsService {
     return this.selectionRepository.save(newSelection);
   }
 
-  async findAll(): Promise<Selection[]> {
-    return this.selectionRepository.find({ relations: ['recipes', 'user'] });
+  async findAll(id: string): Promise<Selection[]> {
+    return this.selectionRepository.find({ where: {user: {id}}, relations: ['recipes', 'user'] });
   }
 
   async findOne(id: string): Promise<Selection> {

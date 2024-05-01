@@ -30,6 +30,12 @@ export class RecipeController {
     return this.recipeService.findAllAdmin();
   }
 
+  @Get('search/:name')
+  findSearch(@Param('name') name: string) {
+    console.log(name)
+    return this.recipeService.findSearch(name);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.recipeService.findOne(id);

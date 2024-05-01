@@ -32,7 +32,6 @@ export class RecipeService {
       .createQueryBuilder('recipe')
       .leftJoinAndSelect('recipe.owner', 'owner')
       .getMany();
-    console.log(recipes);
     return recipes;
   }
 
@@ -42,20 +41,27 @@ export class RecipeService {
       .leftJoinAndSelect('recipe.owner', 'owner')
       .where('recipe.validate = false')
       .getMany();
-    console.log(recipes);
+    return recipes;
+  }
+
+  async findSearch(name: string) {
+    const recipes = await this.recipeRepository
+      .createQueryBuilder('recipe')
+      .leftJoinAndSelect('recipe.owner', 'owner')
+      .where('recipe.name_recipe = :name', { name })
+      .getMany();
     return recipes;
   }
 
   async findOne(id: string) {
     const recipe = await this.recipeRepository
-      .createQueryBuilder('recipe')
-      .leftJoinAndSelect('recipe.owner', 'owner')
-      .where('recipe.id_recipe = :id', { id })
+      .createQueryBuilder('recipes')
+      .leftJoinAndSelect('recipes.owner', 'owner')
+      .where('recipes.id_recipe = :id', { id })
       .getOne();
     if (!recipe) {
       throw new NotFoundException("This recipe doesn't exist");
     }
-    console.log(recipe);
     return recipe;
   }
 
