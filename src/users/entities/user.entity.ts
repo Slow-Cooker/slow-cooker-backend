@@ -1,9 +1,11 @@
 //user.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, Unique } from 'typeorm';
+
 export enum UserRole {
   User = 'User',
   Admin = 'Admin',
 }
+
 @Entity()
 @Unique(['username', 'email'])
 export class User {
