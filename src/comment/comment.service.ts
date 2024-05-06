@@ -20,6 +20,7 @@ export class CommentService {
   async findAll(recipeId: string) {
     const allComment = await this.commentRepository.find({
       where: { recipe: { id_recipe: recipeId } },
+      relations: ['user'],
     });
     return allComment;
   }
