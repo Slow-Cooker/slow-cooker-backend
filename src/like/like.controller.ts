@@ -29,7 +29,7 @@ export class LikeController {
     return this.likeService.findAlluserlike(recipeId);
   }
 
-  @Delete(':recipeId/likes:likeId')
+  @Delete(':recipeId/likes/:likeId')
   remove(@Param('recipeId') recipeId: string, @Param('likeId') likeId: string) {
     return this.likeService.remove(recipeId, likeId);
   }
