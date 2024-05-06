@@ -32,6 +32,7 @@ export class UsersService {
         username: true,
         role: true,
         password: true,
+        profilepicture: true,
       },
     });
   }

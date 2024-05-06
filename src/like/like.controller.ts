@@ -19,6 +19,11 @@ export class LikeController {
     return this.likeService.findAll(recipeId);
   }
 
+  @Get('/likeduser')
+  findAlluserlike(@Param('recipeId') recipeId: string) {
+    return this.likeService.findAlluserlike(recipeId);
+  }
+
   @Delete(':likeId')
   remove(@Param('recipeId') recipeId: string, @Param('likeId') likeId: string) {
     return this.likeService.remove(recipeId, likeId);

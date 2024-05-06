@@ -53,6 +53,15 @@ export class RecipeService {
     return recipes;
   }
 
+  async findRecipeOfUser(user: string) {
+    const recipes = await this.recipeRepository
+      .createQueryBuilder('recipe')
+      .leftJoinAndSelect('recipe.owner', 'owner')
+      .where('recipe.owner.id = :user', { user })
+      .getMany();
+    return recipes;
+  }
+
   async findOne(id: string) {
     const recipe = await this.recipeRepository
       .createQueryBuilder('recipes')

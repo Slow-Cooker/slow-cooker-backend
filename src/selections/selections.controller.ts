@@ -34,6 +34,7 @@ export class SelectionsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
+    console.log(id)
     return this.selectionsService.findOne(id);
   }
 

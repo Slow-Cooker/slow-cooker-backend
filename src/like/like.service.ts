@@ -41,6 +41,14 @@ export class LikeService {
     return allLike;
   }
 
+  async findAlluserlike(recipeId: string) {
+    const allLike = await this.likeRepository.find({
+      where: { recipe: { id_recipe: recipeId } },
+      relations: ["owner"]
+    });
+    return allLike;
+  }
+
   async remove(recipeId: string, id: string) {
     const like = await this.likeRepository.findOneBy({ id });
     if (!like) {
