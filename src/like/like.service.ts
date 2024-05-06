@@ -41,10 +41,21 @@ export class LikeService {
     return allLike;
   }
 
+  async findFamousRecipe() {
+    const famousRecipe = await this.likeRepository
+      .createQueryBuilder('like')
+      .select('like.recipeId', 'recipe')
+      .addSelect('COUNT(like.id)', 'likes')
+      .groupBy('like.recipeId')
+      .orderBy('likes', 'DESC')
+      .getRawOne();
+    return famousRecipe;
+  }
+
   async findAlluserlike(recipeId: string) {
     const allLike = await this.likeRepository.find({
       where: { recipe: { id_recipe: recipeId } },
-      relations: ["owner"]
+      relations: ['owner'],
     });
     return allLike;
   }

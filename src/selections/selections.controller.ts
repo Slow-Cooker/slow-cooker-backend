@@ -12,7 +12,7 @@ import { SelectionsService } from './selections.service';
 import { CreateSelectionDto } from './dto/create-selection.dto';
 import { UpdateSelectionDto } from './dto/update-selection.dto';
 import { RecipeService } from '../recipe/recipe.service';
-import { User } from 'src/users/entities/user.entity';
+
 @Controller('selections')
 export class SelectionsController {
   constructor(
@@ -22,19 +22,19 @@ export class SelectionsController {
 
   @Post()
   create(@Body() createSelectionDto: CreateSelectionDto) {
-    console.log(createSelectionDto)
+    console.log(createSelectionDto);
     return this.selectionsService.create(createSelectionDto);
   }
 
-  @Get("user/:id")
+  @Get('user/:id')
   findAll(@Param('id') id: string) {
-    console.log(id)
+    console.log(id);
     return this.selectionsService.findAll(id);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    console.log(id)
+    console.log(id);
     return this.selectionsService.findOne(id);
   }
 
@@ -68,7 +68,7 @@ export class SelectionsController {
     }
     const newSelection = await this.selectionsService.updateRecipes(
       id_selection,
-      [recipe.id_recipe], // Assuming recipe.id is the ID of the recipe
+      [recipe.id_recipe],
       false,
     );
     return newSelection;
@@ -85,7 +85,7 @@ export class SelectionsController {
     }
     const newSelection = await this.selectionsService.updateRecipes(
       id_selection,
-      [recipe.id_recipe], // Passing only the ID
+      [recipe.id_recipe],
       true,
     );
     return newSelection;

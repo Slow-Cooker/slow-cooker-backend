@@ -1,8 +1,6 @@
 import { PartialType } from '@nestjs/swagger';
 import { CreateRecipeIngredientDto } from './create-recipe_ingredient.dto';
-import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
-import { Ingredient } from '../../ingredient/entities/ingredient.entity';
-import { Recipe } from '../../recipe/entities/recipe.entity';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdateRecipeIngredientDto extends PartialType(
   CreateRecipeIngredientDto,
