@@ -35,7 +35,7 @@ export class RecipeController {
     return this.recipeService.findSearch(name);
   }
 
-  @Get(':user')
+  @Get('user/:user')
   findRecipeOfUser(@Param('user') user: string) {
     return this.recipeService.findRecipeOfUser(user);
   }

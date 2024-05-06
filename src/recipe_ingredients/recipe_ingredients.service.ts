@@ -4,6 +4,7 @@ import { UpdateRecipeIngredientDto } from './dto/update-recipe_ingredient.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RecipeIngredient } from './entities/recipe_ingredient.entity';
+import { Ingredient } from 'src/ingredient/entities/ingredient.entity';
 
 @Injectable()
 export class RecipeIngredientsService {
@@ -37,6 +38,24 @@ export class RecipeIngredientsService {
   async findAll() {
     const allRecipeIngredient = await this.recipeIngredientsRepository.find();
     return allRecipeIngredient;
+  }
+
+  async findRecipeWithIngredient(ingredients: Ingredient[]) {
+    // Extract ingredient IDs from the input array
+    const ingredientIds = ingredients.map(ingredient => ingredient.id_ingredient);
+    const recipeIngredients = await this.recipeIngredientsRepository
+      .createQueryBuilder('recipeIngredient')
+      .leftJoinAndSelect('recipeIngredient.recipe', 'recipe')
+      .leftJoinAndSelect('recipe.owner', 'owner')
+      .leftJoinAndSelect('recipeIngredient.ingredient', 'ingredient')
+      .where('ingredient.id_ingredient IN (:...ingredientIds)', { ingredientIds }) // Filter recipes by ingredient IDs
+      .getMany();
+
+    const uniqueRecipes = new Map();
+    recipeIngredients.forEach(recipeIngredient => {
+      uniqueRecipes.set(recipeIngredient.recipe.id_recipe, recipeIngredient.recipe);
+    });
+    return Array.from(uniqueRecipes.values());
   }
 
   async findAllinRecipe(recipeId: string) {

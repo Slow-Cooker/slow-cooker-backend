@@ -68,6 +68,7 @@ export class RecipeService {
       .leftJoinAndSelect('recipes.owner', 'owner')
       .where('recipes.id_recipe = :id', { id })
       .getOne();
+    console.log(recipe)
     if (!recipe) {
       throw new NotFoundException("This recipe doesn't exist");
     }
